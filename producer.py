@@ -16,14 +16,14 @@ cap = cv2.VideoCapture(0)
 
 
 while True:
-	# grab image 
+	# grab image
 	rst, img = cap.read()
 
 	if not rst:
 		break
 
 	# resize image
-	img = cv2.resize(img, (320,200))
+	img = cv2.resize(img, (int(img.shape[1]/2), int(img.shape[0]/2)))
 
 	# encode to JSON
 	data_json = encode_image(img)
@@ -33,7 +33,7 @@ while True:
 	producer.flush()
 
 	# show preview
-	cv2.imshow("Surce", img)
+	cv2.imshow("Source", img)
 
 
 	# exit on ESC

@@ -12,27 +12,30 @@ group_id = 'read_images'
 kafka_server = 'prokulski.science:9092'
 
 listner = KafkaConsumer(topic_name,
-	group_id=group_id,
-	bootstrap_servers=kafka_server)
+    group_id=group_id,
+    bootstrap_servers=kafka_server)
+
+print(listner)
 
 # wait for message
 for msg in listner:
 
-	# if message key is "image"?
-	if msg.key == b'image':
-		# deocde JSON to image
-		img = decode_image(msg.value)
-		# show image
-		cv2.imshow("Dest", img)
-	else:
-		# other key - just show message
-		ts = dt.fromtimestamp(int(msg.timestamp)/1000)
-		print(i, ts.strftime("%H:%M:%S @ %Y-%m-%d"))
-		print(f"Key = '{msg.key}'\nValue = '{msg.value}'\n")
+    ts = dt.fromtimestamp(int(msg.timestamp)/1000)
+    print(ts.strftime("%H:%M:%S @ %Y-%m-%d"))
 
-	# wait for ESC in preview window
-	if cv2.waitKey(1) == 27:
-		break
+    # if message key is "image"?
+    if msg.key == b'image':
+        # deocde JSON to image
+        img = decode_image(msg.value)
+        # show image
+        cv2.imshow("Dest", img)
+    else:
+        # other key - just show message
+        print(f"Key = '{msg.key}'\nValue = '{msg.value}'\n")
+
+    # wait for ESC in preview window
+    if cv2.waitKey(1) == 27:
+        break
 
 
 cv2.destroyAllWindows()

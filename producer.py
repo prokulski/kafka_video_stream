@@ -1,4 +1,6 @@
 from kafka import KafkaProducer
+
+from datetime import datetime as dt
 import time
 import cv2
 
@@ -24,6 +26,10 @@ while True:
 
 	# resize image
 	img = cv2.resize(img, (int(img.shape[1]/2), int(img.shape[0]/2)))
+
+	# add timestamp to image
+	ts = dt.fromtimestamp(time.time())
+	img = cv2.putText(img, ts.strftime("%H:%M:%S @ %Y-%m-%d"), (0, 11), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
 
 	# encode to JSON
 	data_json = encode_image(img)
